@@ -1,42 +1,36 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { Form, FormOverlay, SearchBtn, SearchInput } from './SearchBar.styled';
 
-export class SearchBar extends Component {
-  state = {
-    inputValue: '',
-    page: 1,
+export const SearchBar = ({ onSubmit }) => {
+  const [inputValue, setInputValue] = useState('');
+
+  const handleInput = evt => {
+    setInputValue(evt.target.value.toLowerCase().trim());
   };
-  handleInput = evt => {
-    this.setState({
-      inputValue: evt.target.value.toLowerCase().trim(),
-    });
-  };
-  handleSubmit = evt => {
+  const handleSubmit = evt => {
     evt.preventDefault();
-    if (this.state.inputValue === '') {
+    if (inputValue === '') {
       alert('Please tell us about your image');
       return;
     }
 
-    this.props.onSubmit(this.state.inputValue);
+    onSubmit(inputValue);
   };
 
-  render() {
-    return (
-      <FormOverlay>
-        <Form onSubmit={this.handleSubmit}>
-          <SearchInput
-            value={this.state.inputValue}
-            onChange={this.handleInput}
-            name="query"
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-          />
-          <SearchBtn type="submit">Search</SearchBtn>
-        </Form>
-      </FormOverlay>
-    );
-  }
-}
+  return (
+    <FormOverlay>
+      <Form onSubmit={handleSubmit}>
+        <SearchInput
+          value={inputValue}
+          onChange={handleInput}
+          name="query"
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+        />
+        <SearchBtn type="submit">Search</SearchBtn>
+      </Form>
+    </FormOverlay>
+  );
+};
